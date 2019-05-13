@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         navigationManager = new NavigationManager(this.getSupportFragmentManager(), R.id.rlMain);
         toolbar.setVisibility(View.GONE);
-        Handler handler = new Handler();
-        handler.postDelayed(() -> navigationManager.openNoAddToBackStack(SplashFragment.class, null), 2000);
+        navigationManager.openNoAddToBackStack(SplashFragment.class, null);
     }
 
     @Override

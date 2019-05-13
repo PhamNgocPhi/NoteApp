@@ -4,6 +4,14 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="color_00bfff">#00bfff</color>
+    <color name="color_toolbar">#00bfff</color>
     <color name="color_333333">#333333</color>
+    <color name="corol00bfff">#00bfff</color>
+    <color name="coror797963">#797963</color>
+    <color name="colortext">#1b484e</color>
+    <color name="btncolorwhite">#ffffff</color>
+    <color name="btncolorblue">#2a8aa4</color>
+    <color name="btncolorgold">#ede646</color>
+    <color name="btncolormandarin">#68cf0e</color>
+    <color name="btncolordacbiet">#d48fde</color>
 </resources>

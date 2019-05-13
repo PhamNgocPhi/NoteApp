@@ -21,11 +21,21 @@ public class NoteToolbar extends RelativeLayout {
     @BindView(R.id.ivNote)
     ImageView ivNote;
 
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+
+    @BindView(R.id.ivColor)
+    ImageView ivColor;
+
+    @BindView(R.id.ivCamera)
+    ImageView ivCamera;
+
+    @BindView(R.id.ivSave)
+    ImageView ivSave;
+
     @BindView(R.id.ivAdd)
     ImageView ivAdd;
 
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
 
     public NoteToolbar(Context context) {
         super(context);
@@ -56,8 +66,48 @@ public class NoteToolbar extends RelativeLayout {
 
     public NoteToolbar onClickBack(OnClickListener listener) {
         ivBack.setVisibility(VISIBLE);
-        if(listener != null) {
+        if (listener != null) {
             ivBack.setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public NoteToolbar onClickNote(OnClickListener listener) {
+        ivBack.setVisibility(VISIBLE);
+        if (listener != null) {
+            ivNote.setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public NoteToolbar onClickColor(OnClickListener listener) {
+        ivColor.setVisibility(VISIBLE);
+        if (listener != null) {
+            ivColor.setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public NoteToolbar onClickCamera(OnClickListener listener) {
+        ivCamera.setVisibility(VISIBLE);
+        if (listener != null) {
+            ivCamera.setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public NoteToolbar onClickSave(OnClickListener listener) {
+        ivSave.setVisibility(VISIBLE);
+        if (listener != null) {
+            ivSave.setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public NoteToolbar onClickAdd(OnClickListener listener) {
+        ivAdd.setVisibility(VISIBLE);
+        if (listener != null) {
+            ivAdd.setOnClickListener(listener);
         }
         return this;
     }
