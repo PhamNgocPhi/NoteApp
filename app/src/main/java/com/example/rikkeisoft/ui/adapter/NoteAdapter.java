@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
     private List<Note> notes;
@@ -69,6 +70,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return notes.size();
     }
 
+    //FIXME không cần public static
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTitle)
         TextView tvTitle;
@@ -85,6 +87,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
+            //FIXME Sử dụng hàm này để bind view
+            ButterKnife.bind(this, itemView);
         }
     }
 

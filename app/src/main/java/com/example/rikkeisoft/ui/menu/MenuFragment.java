@@ -32,7 +32,7 @@ public class MenuFragment extends BaseFragment implements MenuView {
 
     @Override
     public boolean onBackPressed() {
-        return false;
+        return true;
     }
 
     @Override
