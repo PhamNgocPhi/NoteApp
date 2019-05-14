@@ -60,8 +60,11 @@ public class NoteToolbar extends RelativeLayout {
     private void initView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.note_toolbar, this, true);
         ButterKnife.bind(this, view);
-
         ivBack.setVisibility(GONE);
+        ivCamera.setVisibility(GONE);
+        ivColor.setVisibility(GONE);
+        ivSave.setVisibility(GONE);
+        ivAdd.setVisibility(GONE);
     }
 
     public NoteToolbar onClickBack(OnClickListener listener) {
@@ -73,7 +76,7 @@ public class NoteToolbar extends RelativeLayout {
     }
 
     public NoteToolbar onClickNote(OnClickListener listener) {
-        ivBack.setVisibility(VISIBLE);
+        ivNote.setVisibility(VISIBLE);
         if (listener != null) {
             ivNote.setOnClickListener(listener);
         }
@@ -98,6 +101,7 @@ public class NoteToolbar extends RelativeLayout {
 
     public NoteToolbar onClickSave(OnClickListener listener) {
         ivSave.setVisibility(VISIBLE);
+        ivAdd.setVisibility(GONE);
         if (listener != null) {
             ivSave.setOnClickListener(listener);
         }
@@ -110,6 +114,9 @@ public class NoteToolbar extends RelativeLayout {
             ivAdd.setOnClickListener(listener);
         }
         return this;
+    }
+    public void setTvTitle(CharSequence title){
+        tvTitle.setText(title);
     }
 
 }

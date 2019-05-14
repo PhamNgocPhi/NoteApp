@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/ivBack"
-        android:layout_width="@dimen/dp_30"
+        android:layout_width="@dimen/dp_28"
         android:layout_height="@dimen/dp_56"
         android:src="@drawable/abc_ic_ab_back_holo_light"
         app:layout_constraintBottom_toBottomOf="parent"

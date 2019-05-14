@@ -16,7 +16,7 @@ import com.example.rikkeisoft.ui.menu.MenuFragment;
  */
 public class SplashFragment extends BaseFragment implements SplashView {
 
-    private SplashPresenterImp presenter;
+    private SplashPresenter presenter;
 
     public SplashFragment() {
         // Required empty public constructor

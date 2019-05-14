@@ -56,12 +56,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         holder.tvContent.setText(note.getContent());
         holder.tvDate.setText(DateUtils.partDateToString(note.getCreateDate()));
         holder.rlColorItem.setBackgroundColor(note.getColor());
-        holder.cvNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noteOnclickListener.onClickItem(position);
-            }
-        });
+        if(note.isAlarm()){
+            holder.ivalarms.setVisibility(View.VISIBLE);
+        }else {
+            holder.ivalarms.setVisibility(View.GONE);
+        }
+        holder.cvNote.setOnClickListener(v -> noteOnclickListener.onClickItem(position));
 
     }
 
@@ -70,8 +70,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return notes.size();
     }
 
-    //FIXME không cần public static
-    public static class NoteViewHolder extends RecyclerView.ViewHolder {
+    class NoteViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvContent)
@@ -87,7 +86,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
-            //FIXME Sử dụng hàm này để bind view
             ButterKnife.bind(this, itemView);
         }
     }
