@@ -20,7 +20,7 @@ public class NavigationManager<T extends BaseFragment> {
         this.container = container;
     }
 
-    private void openFragment(Class<T> fragment, @Nullable Bundle bundle, boolean addToBackStack, boolean isOpenAsRoot) {
+    private void openFragment(Class<T> fragment, @Nullable Bundle bundle, boolean addToBackStack) {
         if (currentFragment != null && currentFragment.getClass().getName().equalsIgnoreCase(fragment.getName())) {
             return;
         }
@@ -31,11 +31,7 @@ public class NavigationManager<T extends BaseFragment> {
                 currentFragment.setArguments(bundle);
             }
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            if (isOpenAsRoot) {
-                fragmentTransaction.replace(container, currentFragment, "ROOT");
-            } else {
-                fragmentTransaction.replace(container, currentFragment, fragment.getName());
-            }
+            fragmentTransaction.replace(container, currentFragment, fragment.getName());
             if (addToBackStack) {
                 fragmentTransaction.addToBackStack(fragment.getName());
             }
@@ -79,21 +75,24 @@ public class NavigationManager<T extends BaseFragment> {
      * Pops all the queued fragments
      */
     private void popEveryFragment() {
-        fragmentManager.popBackStackImmediate("ROOT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+            fragmentManager.popBackStackImmediate();
+        }
+        //fragmentManager.popBackStackImmediate("ROOT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     /**
      * display the next Fragment and add to back stack
      */
     public void open(Class<T> fragment, @Nullable Bundle bundle) {
-        openFragment(fragment, bundle, true, false);
+        openFragment(fragment, bundle, true);
     }
 
     /**
      * display the next Fragment and no add to back stack
      */
     public void openNoAddToBackStack(Class<T> fragment, @Nullable Bundle bundle) {
-        openFragment(fragment, bundle, false, false);
+        openFragment(fragment, bundle, false);
     }
 
     /**
@@ -101,7 +100,7 @@ public class NavigationManager<T extends BaseFragment> {
      */
     public void openAsRoot(Class<T> fragment, @Nullable Bundle bundle) {
         popEveryFragment();
-        openFragment(fragment, bundle, false, true);
+        openFragment(fragment, bundle, true);
     }
 
     /**

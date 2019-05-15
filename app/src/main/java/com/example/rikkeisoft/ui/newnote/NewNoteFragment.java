@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.Editable;
@@ -25,23 +24,17 @@ import com.example.rikkeisoft.R;
 import com.example.rikkeisoft.data.model.Note;
 import com.example.rikkeisoft.ui.adapter.ImageAdapter;
 import com.example.rikkeisoft.ui.base.BaseFragment;
-import com.example.rikkeisoft.ui.menu.MenuFragment;
 import com.example.rikkeisoft.util.DateUtils;
 import com.example.rikkeisoft.util.Define;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static androidx.core.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 
 
-public class NewNoteFragment extends BaseFragment implements NewNoteView, View.OnClickListener,ImageAdapter.ImageOnClickListener{
+public class NewNoteFragment extends BaseFragment implements NewNoteView, View.OnClickListener, ImageAdapter.ImageOnClickListener {
     private Dialog dialogColor;
     private Dialog dialogCamera;
     private Button btnColorwhite;
@@ -53,7 +46,9 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
     private ImageView ivCameraImage;
     private int colorNote;
     private List<String> mURLImage;
+    //Fixme biến note này a thấy chỉ dùng trong 1 hàm thì không cần khai bao trên này
     private Note note;
+    //Fixme tên này nên để là presenter, để là imp thì tên không gợi lên ý nghĩa gì cả
     private NewNotePresenterImp imp;
     private ImageAdapter imageAdapter;
 
@@ -86,21 +81,23 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
     @Override
     public boolean onBackPressed() {
+        //FIXME để back về màn hình trước sẽ gọi thế này
+        getNavigationManager().navigateBack(null);
         return false;
     }
 
     @Override
     protected void initView() {
-
-        note = new Note();
-        getToolbar().setVisibility(View.VISIBLE);
-        onclickCamera();
-        onClickColor();
-        onClickSave();
-        onClickBack();
+//        getToolbar().setVisibility(View.VISIBLE);
+//        onclickCamera();
+//        onClickColor();
+//        onClickSave();
+//        onClickBack();
+        initToolbar();
         setOnChangedTitle();
         tvDate.setText(DateUtils.getTimeByPattern("dd/MM/YYYY hh:mm"));
 
+        note = new Note();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         recyclerImage.setLayoutManager(gridLayoutManager);
         recyclerImage.setAdapter(imageAdapter);
@@ -108,6 +105,21 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
         imageAdapter.setImageOnclickListener(this);
 
 
+    }
+
+    //FIXME Vì toolbar được viết theo kiểu singleton nên không cần tách hàm nhỏ ra mà sẽ viết thế này
+    private void initToolbar() {
+        getToolbar().setVisibility(View.VISIBLE);
+        getToolbar()
+                .onClickCamera(v -> showDialogCamera())
+                .onClickColor(v -> showDiaLogBackground())
+                .onClickSave(v -> insertNote())
+                .onClickBack(v -> {
+                    //Fixme back ở toolbar sẽ viết thế này
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
+                });
     }
 
     private void onclickCamera() {
@@ -190,6 +202,7 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
             Log.i("Error", exp.toString());
         }
     }
+
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -275,7 +288,11 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
     @Override
     public void backMenu() {
-        getNavigationManager().open(MenuFragment.class, null);
+        //Fixme khi back về sẽ không gọi hàm open
+        //nếu gọi hàm open khi back thế này thì backstack sẽ là menu -> newNote -> menu. Ở menu cuối khi bấm back sẽ về newnote
+        //getNavigationManager().open(MenuFragment.class, null);
+        //đúng sẽ phải thế này
+        getNavigationManager().navigateBack(null);
     }
 
     @Override

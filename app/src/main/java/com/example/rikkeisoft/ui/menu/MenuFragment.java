@@ -1,7 +1,6 @@
 package com.example.rikkeisoft.ui.menu;
 
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,9 @@ import butterknife.BindView;
 public class MenuFragment extends BaseFragment implements MenuView {
 
     private NoteAdapter noteAdapter;
+    //fixme trong trường hợp notes chỉ dùng trong 1 hàm thì không cần khai báo trên này
     private List<Note> notes;
+    //fixme đổi tên để biến này có ý nghĩa hơn
     private MenuPresenterImp imp;
 
     @BindView(R.id.rcNote)
@@ -30,9 +31,6 @@ public class MenuFragment extends BaseFragment implements MenuView {
         imp = new MenuPresenterImp(this);
         notes = new ArrayList<>();
         noteAdapter = new NoteAdapter();
-
-
-
     }
 
     @Override
@@ -42,7 +40,10 @@ public class MenuFragment extends BaseFragment implements MenuView {
 
     @Override
     public boolean onBackPressed() {
-        return true;
+        if (!getNavigationManager().navigateBack(null) && getActivity() != null) {
+            getActivity().moveTaskToBack(true);
+        }
+        return false;
     }
 
     @Override
@@ -62,5 +63,7 @@ public class MenuFragment extends BaseFragment implements MenuView {
             getNavigationManager().open(NewNoteFragment.class, null);
         });
     }
+
+    //Fixme cần tạo thêm 1 hàm init toolbar ở đây, để ẩn hiện các phần cần thiết
 
 }
