@@ -5,4 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Color">Choose Color</string>
     <string name="tv_insertpicture">Insert Picture</string>
+    <string name="permission"> permission error</string>
+    <string name="text_share">Share</string>
 </resources>

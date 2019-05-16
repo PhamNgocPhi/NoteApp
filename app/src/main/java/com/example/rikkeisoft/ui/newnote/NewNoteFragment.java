@@ -1,11 +1,14 @@
 package com.example.rikkeisoft.ui.newnote;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,6 +20,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,10 +52,7 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
     private ImageView ivCameraImage;
     private int colorNote;
     private List<String> mURLImage;
-    //Fixme biến note này a thấy chỉ dùng trong 1 hàm thì không cần khai bao trên này
-    private Note note;
-    //Fixme tên này nên để là presenter, để là imp thì tên không gợi lên ý nghĩa gì cả
-    private NewNotePresenterImp imp;
+    private NewNotePresenterImp newNotePresenterImp;
     private ImageAdapter imageAdapter;
 
     @BindView(R.id.scrollView)
@@ -69,7 +72,7 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
 
     public NewNoteFragment() {
-        imp = new NewNotePresenterImp(this);
+        newNotePresenterImp = new NewNotePresenterImp(this);
         mURLImage = new ArrayList<>();
         imageAdapter = new ImageAdapter();
     }
@@ -81,23 +84,16 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
     @Override
     public boolean onBackPressed() {
-        //FIXME để back về màn hình trước sẽ gọi thế này
+        //back về màn hình trước
         getNavigationManager().navigateBack(null);
         return false;
-    }
+}
 
     @Override
     protected void initView() {
-//        getToolbar().setVisibility(View.VISIBLE);
-//        onclickCamera();
-//        onClickColor();
-//        onClickSave();
-//        onClickBack();
         initToolbar();
         setOnChangedTitle();
         tvDate.setText(DateUtils.getTimeByPattern("dd/MM/YYYY hh:mm"));
-
-        note = new Note();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         recyclerImage.setLayoutManager(gridLayoutManager);
         recyclerImage.setAdapter(imageAdapter);
@@ -107,52 +103,31 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
     }
 
-    //FIXME Vì toolbar được viết theo kiểu singleton nên không cần tách hàm nhỏ ra mà sẽ viết thế này
     private void initToolbar() {
         getToolbar().setVisibility(View.VISIBLE);
         getToolbar()
-                .onClickCamera(v -> showDialogCamera())
+                .onClickCamera(v -> {
+                    askForPermission();
+
+                })
                 .onClickColor(v -> showDiaLogBackground())
                 .onClickSave(v -> insertNote())
                 .onClickBack(v -> {
-                    //Fixme back ở toolbar sẽ viết thế này
+                    //back về màn hình trước
                     if (getActivity() != null) {
                         getActivity().onBackPressed();
                     }
                 });
     }
 
-    private void onclickCamera() {
-        getToolbar().onClickCamera(v -> {
-            showDialogCamera();
-        });
-    }
-
-    private void onClickColor() {
-        getToolbar().onClickColor(v -> {
-            showDiaLogBackground();
-        });
-    }
-
-    private void onClickSave() {
-        getToolbar().onClickSave(v -> {
-            insertNote();
-
-        });
-    }
-
-    private void onClickBack() {
-        getToolbar().onClickBack(v -> {
-
-        });
-    }
-
     private void insertNote() {
+        Note note = new Note();
         note.setTitle(etTitle.getText().toString().trim());
         note.setContent(etContent.getText().toString().trim());
         note.setCreateDate(Calendar.getInstance().getTime());
         note.setColor(colorNote);
-        imp.insertNote(note);
+        note.setUrls(mURLImage);
+        newNotePresenterImp.insertNote(note);
 
     }
 
@@ -201,6 +176,18 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
         } catch (Exception exp) {
             Log.i("Error", exp.toString());
         }
+    }
+
+    private void addImageToCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, Define.CAMERA_PIC_REQUEST);
+
+    }
+    private void previewImage(String url) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        intent.setDataAndType(Uri.parse(url), Define.TYPE_IMAGE);
+        startActivity(intent);
     }
 
     @Override
@@ -259,7 +246,7 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
                 dialogCamera.dismiss();
                 break;
             case R.id.ivCameraImage:
-
+                addImageToCamera();
                 dialogCamera.dismiss();
                 break;
             default:
@@ -288,20 +275,56 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
     @Override
     public void backMenu() {
-        //Fixme khi back về sẽ không gọi hàm open
-        //nếu gọi hàm open khi back thế này thì backstack sẽ là menu -> newNote -> menu. Ở menu cuối khi bấm back sẽ về newnote
-        //getNavigationManager().open(MenuFragment.class, null);
-        //đúng sẽ phải thế này
         getNavigationManager().navigateBack(null);
     }
 
     @Override
     public void onClickItem(String url) {
+        previewImage(url);
 
     }
 
     @Override
     public void onRemove(int position) {
+        mURLImage.remove(position);
+        imageAdapter.setImages(mURLImage);
+        imageAdapter.notifyDataSetChanged();
 
     }
+
+    private void askForPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{
+                         Manifest.permission.CAMERA,
+                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                         Manifest.permission.READ_EXTERNAL_STORAGE
+                },Define.MY_PERMISSIONS_REQUEST_ACCOUNTS);
+            } else {
+                showDialogCamera();
+            }
+        } else {
+            showDialogCamera();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Define.MY_PERMISSIONS_REQUEST_ACCOUNTS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showDialogCamera();
+                } else {
+                    Toast.makeText(getContext(), R.string.permission, Toast.LENGTH_SHORT).show();
+                    System.exit(0);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
+

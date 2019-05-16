@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rikkeisoft.R;
 import com.example.rikkeisoft.ui.base.BaseFragment;
-import com.example.rikkeisoft.ui.main.MainActivity;
 import com.example.rikkeisoft.ui.menu.MenuFragment;
 
 /**

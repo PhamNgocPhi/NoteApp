@@ -1,5 +1,6 @@
 package com.example.rikkeisoft.ui.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         final Note note = notes.get(position);
+        final  int noteID = note.getId();
         holder.tvTitle.setText(note.getTitle());
         holder.tvContent.setText(note.getContent());
         holder.tvDate.setText(DateUtils.partDateToString(note.getCreateDate()));
@@ -61,7 +63,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         }else {
             holder.ivalarms.setVisibility(View.GONE);
         }
-        holder.cvNote.setOnClickListener(v -> noteOnclickListener.onClickItem(position));
+        holder.cvNote.setOnClickListener(v -> noteOnclickListener.onClickItem(noteID));
 
     }
 

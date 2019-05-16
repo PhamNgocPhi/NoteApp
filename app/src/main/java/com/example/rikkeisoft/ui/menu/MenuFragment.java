@@ -1,5 +1,6 @@
 package com.example.rikkeisoft.ui.menu;
 
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -9,28 +10,27 @@ import com.example.rikkeisoft.R;
 import com.example.rikkeisoft.data.model.Note;
 import com.example.rikkeisoft.ui.adapter.NoteAdapter;
 import com.example.rikkeisoft.ui.base.BaseFragment;
+import com.example.rikkeisoft.ui.detail.DetailFragment;
 import com.example.rikkeisoft.ui.newnote.NewNoteFragment;
+import com.example.rikkeisoft.util.Define;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class MenuFragment extends BaseFragment implements MenuView {
+public class MenuFragment extends BaseFragment implements MenuView,NoteAdapter.NoteOnclickListener {
 
     private NoteAdapter noteAdapter;
-    //fixme trong trường hợp notes chỉ dùng trong 1 hàm thì không cần khai báo trên này
-    private List<Note> notes;
-    //fixme đổi tên để biến này có ý nghĩa hơn
-    private MenuPresenterImp imp;
+    private MenuPresenterImp menuPresenterImp;
 
     @BindView(R.id.rcNote)
     RecyclerView rcNote;
 
     public MenuFragment() {
-        imp = new MenuPresenterImp(this);
-        notes = new ArrayList<>();
+        menuPresenterImp = new MenuPresenterImp(this);
         noteAdapter = new NoteAdapter();
+        noteAdapter.setNoteOnclickListener(this);
     }
 
     @Override
@@ -48,22 +48,36 @@ public class MenuFragment extends BaseFragment implements MenuView {
 
     @Override
     protected void initView() {
-        getToolbar().setVisibility(View.VISIBLE);
-        notes = imp.getAllNote();
+        initToolbar();
+        List<Note> notes = new ArrayList<>();
+        notes = menuPresenterImp.getAllNote();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         rcNote.setLayoutManager(gridLayoutManager);
         rcNote.setAdapter(noteAdapter);
         noteAdapter.setNotes(notes);
-        openNewNote();
+
 
     }
 
-    private void openNewNote() {
+    private void initToolbar(){
+        getToolbar().setVisibility(View.VISIBLE);
+        getToolbar().setVisibilityIvBack()
+                .setVisibilityIvBack()
+                .setVisibilityIvCamera()
+                .setVisibilityIvColor()
+                .clearTitle()
+                .setVisibilityIvSave();
         getToolbar().onClickAdd(v -> {
             getNavigationManager().open(NewNoteFragment.class, null);
         });
+
     }
 
-    //Fixme cần tạo thêm 1 hàm init toolbar ở đây, để ẩn hiện các phần cần thiết
 
+    @Override
+    public void onClickItem(int noteId) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Define.ID,noteId);
+        getNavigationManager().open(DetailFragment.class, bundle);
+    }
 }

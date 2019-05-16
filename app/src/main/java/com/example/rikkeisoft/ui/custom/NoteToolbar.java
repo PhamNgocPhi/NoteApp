@@ -15,6 +15,8 @@ import butterknife.ButterKnife;
 
 public class NoteToolbar extends RelativeLayout {
 
+    private String textTitle;
+
     @BindView(R.id.ivBack)
     ImageView ivBack;
 
@@ -60,6 +62,7 @@ public class NoteToolbar extends RelativeLayout {
     private void initView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.note_toolbar, this, true);
         ButterKnife.bind(this, view);
+        textTitle =  tvTitle.getText().toString().trim();
         ivBack.setVisibility(GONE);
         ivCamera.setVisibility(GONE);
         ivColor.setVisibility(GONE);
@@ -117,6 +120,26 @@ public class NoteToolbar extends RelativeLayout {
     }
     public void setTvTitle(CharSequence title){
         tvTitle.setText(title);
+    }
+    public NoteToolbar setVisibilityIvBack(){
+        ivBack.setVisibility(GONE);
+        return this;
+    }
+    public NoteToolbar setVisibilityIvColor(){
+        ivColor.setVisibility(GONE);
+        return this;
+    }
+    public NoteToolbar setVisibilityIvCamera(){
+        ivCamera.setVisibility(GONE);
+        return this;
+    }
+    public NoteToolbar setVisibilityIvSave(){
+        ivSave.setVisibility(GONE);
+        return this;
+    }
+    public NoteToolbar clearTitle(){
+        tvTitle.setText(textTitle);
+        return this;
     }
 
 }
