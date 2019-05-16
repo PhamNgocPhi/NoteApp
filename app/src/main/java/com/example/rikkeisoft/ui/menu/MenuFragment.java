@@ -49,6 +49,7 @@ public class MenuFragment extends BaseFragment implements MenuView,NoteAdapter.N
     @Override
     protected void initView() {
         initToolbar();
+        //fixme 2 dòng dưới có thể gộp luôn thành 1
         List<Note> notes = new ArrayList<>();
         notes = menuPresenterImp.getAllNote();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);

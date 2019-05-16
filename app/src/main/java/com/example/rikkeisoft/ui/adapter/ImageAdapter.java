@@ -45,10 +45,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @Override
     public void onBindViewHolder(@NonNull ImageAdapter.ImageViewHolder viewHolder, int i) {
         final String url = mUrlImage.get(i);
+        //Fixme vì project đâng dùng java 8 nên có thể dùng trực tiếp i mà không cần thêm biến position
         final int position = i;
         viewHolder.itemImage.setImageURI(Uri.parse(url));
         viewHolder.itemImage.setOnClickListener(v -> imageOnClickListener.onClickItem(url));
-        viewHolder.buttonRemove.setOnClickListener(v -> imageOnClickListener.onRemove(position));
+        viewHolder.buttonRemove.setOnClickListener(v -> imageOnClickListener.onRemove(i));
 
     }
 

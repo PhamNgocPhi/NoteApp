@@ -45,6 +45,8 @@ public class DateUtils {
         return time;
     }
 
+    //fixme method này sẽ đặt trong class khác, class util sẽ chỉ chứa những hàm liên quan đến date
+    // có thể tạo thêm class commonUtils rồi đưa hàm này vào
     public static Uri getImageUri(Context inContext, Bitmap inImage) {
         Bitmap OutImage = Bitmap.createScaledBitmap(inImage, 1000, 1000, true);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), OutImage, "Title", null);

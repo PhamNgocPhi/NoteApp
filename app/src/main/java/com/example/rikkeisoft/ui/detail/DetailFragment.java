@@ -345,6 +345,7 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //fixme trong trường hợp chỉ có 1 điều kiện thế này thì nên dùng if
         switch (requestCode) {
             case Define.MY_PERMISSIONS_REQUEST_ACCOUNTS:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -361,6 +362,7 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
 
     @Override
     public void onClick(View v) {
+        //fixme color khai báo trong file color.xml chứ không đặt trong define
         switch (v.getId()) {
             case R.id.btnColorwhite:
                 scrollView.setBackgroundColor(Color.WHITE);
