@@ -30,6 +30,7 @@ import com.example.rikkeisoft.R;
 import com.example.rikkeisoft.data.model.Note;
 import com.example.rikkeisoft.ui.adapter.ImageAdapter;
 import com.example.rikkeisoft.ui.base.BaseFragment;
+import com.example.rikkeisoft.util.CommonUtils;
 import com.example.rikkeisoft.util.DateUtils;
 import com.example.rikkeisoft.util.Define;
 
@@ -203,7 +204,7 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
 
             } else if (reqCode == Define.CAMERA_PIC_REQUEST) {
                 Bitmap image = (Bitmap) data.getExtras().get("data");
-                mURLImage.add(DateUtils.getImageUri(getContext(), image).toString());
+                mURLImage.add(CommonUtils.getImageUri(getContext(), image).toString());
                 imageAdapter.setImages(mURLImage);
                 imageAdapter.notifyDataSetChanged();
             }
@@ -222,23 +223,23 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
                 dialogColor.dismiss();
                 break;
             case R.id.btnColorblue:
-                scrollView.setBackgroundColor(Color.parseColor(Define.COLOR1));
-                colorNote = Color.parseColor(Define.COLOR1);
+                scrollView.setBackgroundResource(R.color.btncolorblue);
+                colorNote = getResources().getColor(R.color.btncolorblue);
                 dialogColor.dismiss();
                 break;
             case R.id.btnColordacbiete:
-                scrollView.setBackgroundColor(Color.parseColor(Define.COLOR3));
-                colorNote = Color.parseColor(Define.COLOR3);
+                scrollView.setBackgroundResource(R.color.btncolordacbiet);
+                colorNote = getResources().getColor(R.color.btncolordacbiet);
                 dialogColor.dismiss();
                 break;
             case R.id.btnColorpink:
-                scrollView.setBackgroundColor(Color.parseColor(Define.COLOR2));
-                colorNote = Color.parseColor(Define.COLOR2);
+                scrollView.setBackgroundResource(R.color.btnColorpink);
+                colorNote = getResources().getColor(R.color.btnColorpink);
                 dialogColor.dismiss();
                 break;
             case R.id.btnColormandarin:
-                scrollView.setBackgroundColor(Color.parseColor(Define.COLOR4));
-                colorNote = Color.parseColor(Define.COLOR4);
+                scrollView.setBackgroundResource(R.color.btncolormandarin);
+                colorNote =getResources().getColor(R.color.btncolormandarin);
                 dialogColor.dismiss();
                 break;
             case R.id.ivImageGallery:

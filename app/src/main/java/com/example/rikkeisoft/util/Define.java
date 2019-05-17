@@ -16,4 +16,18 @@ public class Define {
 
     public static  final  String ID = "ID";
 
+
+
+
+
+
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_ID = "ID";
+
+
+    public static class NavigationKey {
+        public static final String days[] = {"Day", "Today", "Tomorrow", "After Tomorrow", "Other"};
+        public static final String hours[] = {"Time", "08:00", "12:00", "16:00", "20:00", "Other"};
+    }
+
 }
