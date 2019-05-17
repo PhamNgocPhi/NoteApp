@@ -512,12 +512,12 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
 
     private void setAlarmNote() {
         long timesInMillis = DateUtils.parseDateToMilisecond(dayAlarm + " " + hourAlarm);
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), SchedulingService.class);
         intent.putExtra(Define.KEY_TYPE, notes.get(currentPosition).getTitle());
         intent.putExtra(Define.KEY_ID,notes.get(currentPosition).getId());
-        PendingIntent pendingIntent = PendingIntent.getService(
-                getContext(), notes.get(currentPosition).getId(), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getContext(), notes.get(currentPosition).getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmManager
                     .setExact(AlarmManager.RTC_WAKEUP, timesInMillis, pendingIntent);
