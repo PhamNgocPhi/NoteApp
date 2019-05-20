@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Layout này đang thiết kế hơi thừa-->
+<!--Layout này chỉ cần LinearLayout(vertical) -> TextView -> LinearLayout(horizontal) -> LinearLayout(horizontal)-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dp_300"
     android:layout_height="@dimen/dp_200"

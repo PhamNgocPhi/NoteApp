@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.splash.SplashFragment">
 
+    <!--Fixme không cần frameLayout trên đâu. Layout càng nhiều tầng thì thời gian bindview càng lâu nên hạn chế việc lồng layout không cần thiết-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

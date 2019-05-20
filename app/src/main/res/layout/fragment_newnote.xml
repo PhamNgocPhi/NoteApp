@@ -6,6 +6,9 @@
     android:orientation="vertical"
     tools:context=".ui.splash.SplashFragment">
 
+    <!--Todo cố gắng hạn chế việc layout lồng nhau trong tất cả các file layout-->
+    <!--Fixme Không cần LinearLayout-->
+    <!--Khi trong scrollView có recyclerView thì sẽ dùng NestedScrollView-->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"

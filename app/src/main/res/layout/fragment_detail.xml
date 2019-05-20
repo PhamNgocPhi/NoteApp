@@ -7,6 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <!--FIXME để layout này là layout tổng luôn , không cần 2 layout trên-->
         <LinearLayout
             android:id="@id/llMenu"
             android:layout_width="match_parent"
