@@ -14,10 +14,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,6 +41,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,12 +54,17 @@ import com.example.rikkeisoft.util.CommonUtils;
 import com.example.rikkeisoft.util.DateUtils;
 import com.example.rikkeisoft.util.Define;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class DetailFragment extends BaseFragment implements DetailView, View.OnClickListener, ImageAdapter.ImageOnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -111,8 +120,9 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     private Button btnColorpink;
     private Button btnColormandarin;
     private Button btnColordacbiet;
-    private ImageView ivImageGallery;
-    private ImageView ivCameraImage;
+    private LinearLayout llCamera;
+    private LinearLayout llAlbum;
+
     private int colorNoteUpdate;
     private int noteIDUpdate;
     private int currentPosition;
@@ -128,11 +138,11 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     private String hourAlarm;
     private String dayAlarm;
 
-    private static final String days[] = {"Day", "Today", "Tomorrow", "After Tomorrow", "Other"};
-    private static final String hours[] = {"Time", "08:00", "12:00", "16:00", "20:00", "Other"};
+    private String days[] = {"Day", "Today", "Tomorrow", "After Tomorrow", "Other"};
+    private String hours[] = {"Time", "08:00", "12:00", "16:00", "20:00", "Other"};
     private static final String PREVIOUS_NOTE = "PREVIOUS_NOTE";
     private static final String NEXT_NOTE = "NEXT_NOTE";
-
+    private String pictureImagePath;
     @Override
     protected int layoutRes() {
         return R.layout.fragment_detail;
@@ -168,12 +178,12 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
         ivShare.setOnClickListener(this);
 
 
-        mDayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, days);
-        mDayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, days);
+        mDayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spnDay.setAdapter(mDayAdapter);
 
-        mHourAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, hours);
-        mHourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mHourAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, hours);
+        mHourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spnHour.setAdapter(mHourAdapter);
 
         spnDay.setOnItemSelectedListener(this);
@@ -259,11 +269,11 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
         dialogCamera.setContentView(R.layout.layout_dialog_insertpicture);
         dialogCamera.show();
 
-        ivImageGallery = dialogCamera.findViewById(R.id.ivImageGallery);
-        ivCameraImage = dialogCamera.findViewById(R.id.ivCameraImage);
+        llCamera = dialogCamera.findViewById(R.id.llCamera);
+        llAlbum = dialogCamera.findViewById(R.id.llAlbum);
 
-        ivImageGallery.setOnClickListener(this);
-        ivCameraImage.setOnClickListener(this);
+        llCamera.setOnClickListener(this);
+        llAlbum.setOnClickListener(this);
 
 
     }
@@ -280,10 +290,33 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     }
 
     private void addImageToCamera() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, Define.CAMERA_PIC_REQUEST);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
 
+            }
+            if (photoFile != null) {
+                pictureImagePath = photoFile.getAbsolutePath();
+                Uri photoURI = FileProvider.getUriForFile(
+                        getContext(),
+                        "com.example.rikkeisoft.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, Define.CAMERA_PIC_REQUEST);
+            }
+        }
     }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File  image = File.createTempFile(timeStamp,".jpg",storageDir);
+        return image;
+    }
+
 
     private void previewImage(String url) {
         Intent intent = new Intent();
@@ -305,8 +338,8 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
                 imageAdapter.notifyDataSetChanged();
 
             } else if (reqCode == Define.CAMERA_PIC_REQUEST) {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                mURLImage.add(CommonUtils.getImageUri(getContext(), image).toString());
+                Bitmap imageBitmap = BitmapFactory.decodeFile(pictureImagePath);
+                mURLImage.add(CommonUtils.getImageUri(getContext(), imageBitmap).toString());
                 imageAdapter.setImages(mURLImage);
                 imageAdapter.notifyDataSetChanged();
             }
@@ -443,11 +476,11 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
                 colorNoteUpdate = getResources().getColor(R.color.btncolormandarin);
                 dialogColor.dismiss();
                 break;
-            case R.id.ivImageGallery:
+            case R.id.llAlbum:
                 getImageFromAlbum();
                 dialogCamera.dismiss();
                 break;
-            case R.id.ivCameraImage:
+            case R.id.llCamera:
                 addImageToCamera();
                 dialogCamera.dismiss();
                 break;
@@ -635,7 +668,7 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
             }
         }
     }
-    
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 

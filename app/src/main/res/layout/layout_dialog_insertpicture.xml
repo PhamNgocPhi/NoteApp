@@ -16,12 +16,14 @@
         android:textColor="@color/colortext"
         android:textSize="@dimen/sp_16" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
 
         <LinearLayout
+            android:id="@+id/llCamera"
+            android:background="@color/bgImage"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,6 +47,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llAlbum"
+            android:background="@color/bgImage"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,5 +74,4 @@
                 android:text="Choose Photo"
                 android:textSize="@dimen/dp_16" />
         </LinearLayout>
-    </LinearLayout>
 </LinearLayout>
