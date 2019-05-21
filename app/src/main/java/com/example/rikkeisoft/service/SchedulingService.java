@@ -33,7 +33,7 @@ public class SchedulingService extends BroadcastReceiver {
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
-                id, resultIntent,
+                    id, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder mBuilder = new Notification.Builder(context);

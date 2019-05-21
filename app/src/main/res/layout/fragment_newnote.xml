@@ -1,63 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_below="@id/rlMain"
     tools:context=".ui.splash.SplashFragment">
 
-    <!--Todo cố gắng hạn chế việc layout lồng nhau trong tất cả các file layout-->
-    <!--Fixme Không cần LinearLayout-->
-    <!--Khi trong scrollView có recyclerView thì sẽ dùng NestedScrollView-->
-    <ScrollView
-        android:id="@+id/scrollView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/rlMain">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerImage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerImage"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:textSize="@dimen/dp_16"
+            tools:text="01/04/2019 14:16" />
 
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/recyclerImage"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/dp_16"
-                android:layout_marginRight="@dimen/dp_16"
-                android:textSize="@dimen/dp_16"
-                tools:text="01/04/2019 14:16" />
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDate"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/dp_16"
+            android:backgroundTint="#e4e4dd"
+            android:hint="Title"
+            android:textColorHint="#e4e4dd" />
 
-            <EditText
-                android:id="@+id/etTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvDate"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_16"
-                android:backgroundTint="#e4e4dd"
-                android:hint="Title"
-                android:textColorHint="#e4e4dd" />
-
-            <EditText
-                android:id="@+id/etContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etTitle"
-                android:layout_marginLeft="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_16"
-                android:backgroundTint="#e4e4dd"
-                android:hint="Note"
-                android:textColorHint="#e4e4dd" />
-        </RelativeLayout>
-    </ScrollView>
-</LinearLayout>
+        <EditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etTitle"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:backgroundTint="#e4e4dd"
+            android:hint="Note"
+            android:textColorHint="#e4e4dd" />
+    </RelativeLayout>
+</ScrollView>

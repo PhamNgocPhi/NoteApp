@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.rikkeisoft.R;
 import com.example.rikkeisoft.ui.NavigationManager;
 import com.example.rikkeisoft.ui.custom.NoteToolbar;
+import com.example.rikkeisoft.ui.menu.MenuFragment;
 import com.example.rikkeisoft.ui.splash.SplashFragment;
 
 import butterknife.BindView;

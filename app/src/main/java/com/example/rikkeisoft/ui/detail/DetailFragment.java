@@ -128,6 +128,11 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     private String hourAlarm;
     private String dayAlarm;
 
+    private static final String days[] = {"Day", "Today", "Tomorrow", "After Tomorrow", "Other"};
+    private static final String hours[] = {"Time", "08:00", "12:00", "16:00", "20:00", "Other"};
+    private static final String PREVIOUS_NOTE = "PREVIOUS_NOTE";
+    private static final String NEXT_NOTE = "NEXT_NOTE";
+
     @Override
     protected int layoutRes() {
         return R.layout.fragment_detail;
@@ -163,11 +168,11 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
         ivShare.setOnClickListener(this);
 
 
-        mDayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Define.NavigationKey.days);
+        mDayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, days);
         mDayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDay.setAdapter(mDayAdapter);
 
-        mHourAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Define.NavigationKey.hours);
+        mHourAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, hours);
         mHourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnHour.setAdapter(mHourAdapter);
 
@@ -346,9 +351,9 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
 
     private void updateActionBottom(String action) {
 
-        if (Define.NEXT_NOTE.equals(action) && currentPosition < notes.size() - 1) {
+        if (NEXT_NOTE.equals(action) && currentPosition < notes.size() - 1) {
             currentPosition = currentPosition + 1;
-        } else if (Define.PREVIOUS_NOTE.equals(action) && currentPosition > 0) {
+        } else if (PREVIOUS_NOTE.equals(action) && currentPosition > 0) {
             currentPosition = currentPosition - 1;
         }
         setUpForEditNote();
@@ -372,7 +377,7 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setType(Define.TYPE_SHARE);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, etTitleUpdate.getText().toString());
-        sendIntent.putExtra(Intent.EXTRA_TEXT,etContentUpdate.getText().toString());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, etContentUpdate.getText().toString());
         startActivity(Intent.createChooser(sendIntent, getString(R.string.text_share)));
     }
 
@@ -447,10 +452,10 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
                 dialogCamera.dismiss();
                 break;
             case R.id.ivPreviouitem:
-                updateActionBottom(Define.PREVIOUS_NOTE);
+                updateActionBottom(PREVIOUS_NOTE);
                 break;
             case R.id.ivNext:
-                updateActionBottom(Define.NEXT_NOTE);
+                updateActionBottom(NEXT_NOTE);
                 break;
             case R.id.ivDiscard:
                 showDeleteNoteDialog();
@@ -509,13 +514,12 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     }
 
 
-
     private void setAlarmNote() {
         long timesInMillis = DateUtils.parseDateToMilisecond(dayAlarm + " " + hourAlarm);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), SchedulingService.class);
         intent.putExtra(Define.KEY_TYPE, notes.get(currentPosition).getTitle());
-        intent.putExtra(Define.KEY_ID,notes.get(currentPosition).getId());
+        intent.putExtra(Define.KEY_ID, notes.get(currentPosition).getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 getContext(), notes.get(currentPosition).getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -527,77 +531,13 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
         }
     }
 
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.getId() == R.id.spnDateday) {
-            switch (position) {
-                case 1:
-                    dayAlarm = DateUtils.addDate(0);
-                    Define.NavigationKey.days[0] = dayAlarm;
-                    mDayAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Date Alarm: " + dayAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    dayAlarm = DateUtils.addDate(1);
-                    Define.NavigationKey.days[0] = dayAlarm;
-                    mDayAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Date Alarm: " + dayAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    dayAlarm = DateUtils.addDate(2);
-                    Define.NavigationKey.days[0] = dayAlarm;
-                    mDayAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Date Alarm: " + dayAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 4:
-                    showDataPickerDiaLog();
-                    break;
-                default:
-                    break;
-            }
-        } else if (parent.getId() == R.id.spnHour) {
-            switch (position) {
-                case 1:
-                    hourAlarm = Define.NavigationKey.hours[1];
-                    Define.NavigationKey.hours[0] = hourAlarm;
-                    mHourAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    hourAlarm = Define.NavigationKey.hours[2];
-                    Define.NavigationKey.hours[0] = hourAlarm;
-                    mHourAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    hourAlarm = Define.NavigationKey.hours[3];
-                    Define.NavigationKey.hours[0] = hourAlarm;
-                    mHourAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 4:
-                    hourAlarm = Define.NavigationKey.hours[4];
-                    Define.NavigationKey.hours[0] = hourAlarm;
-                    mHourAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
-                    break;
-                case 5:
-                    showTimePickerDialog();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     private void showTimePickerDialog() {
         Calendar calendar = Calendar.getInstance();
         final int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (view, hourOfDay, minute1) -> {
             hourAlarm = hourOfDay + ":" + minute1;
-            Define.NavigationKey.hours[0] = hourAlarm;
+            hours[0] = hourAlarm;
             mHourAdapter.notifyDataSetChanged();
             spnHour.setSelection(0);
 
@@ -613,7 +553,7 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year1, monthOfYear, dayOfMonth) -> {
             dayAlarm = dayOfMonth + "/" + monthOfYear + "/" + year1;
-            Define.NavigationKey.days[0] = dayAlarm;
+            days[0] = dayAlarm;
             mDayAdapter.notifyDataSetChanged();
 
         }, year, month, day);
@@ -633,6 +573,69 @@ public class DetailFragment extends BaseFragment implements DetailView, View.OnC
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent.getId() == R.id.spnDateday) {
+            switch (position) {
+                case 1:
+                    dayAlarm = DateUtils.addDate(0);
+                    days[0] = dayAlarm;
+                    mDayAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Date Alarm: " + dayAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    dayAlarm = DateUtils.addDate(1);
+                    days[0] = dayAlarm;
+                    mDayAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Date Alarm: " + dayAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    dayAlarm = DateUtils.addDate(2);
+                    days[0] = dayAlarm;
+                    mDayAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Date Alarm: " + dayAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
+                    showDataPickerDiaLog();
+                    break;
+                default:
+                    break;
+            }
+        } else if (parent.getId() == R.id.spnHour) {
+            switch (position) {
+                case 1:
+                    hourAlarm = hours[1];
+                    hours[0] = hourAlarm;
+                    mHourAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    hourAlarm = hours[2];
+                    hours[0] = hourAlarm;
+                    mHourAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    hourAlarm = hours[3];
+                    hours[0] = hourAlarm;
+                    mHourAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
+                    hourAlarm = hours[4];
+                    hours[0] = hourAlarm;
+                    mHourAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Hour Alarm: " + hourAlarm, Toast.LENGTH_SHORT).show();
+                    break;
+                case 5:
+                    showTimePickerDialog();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 

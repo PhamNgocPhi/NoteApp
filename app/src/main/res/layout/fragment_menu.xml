@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.splash.SplashFragment">
 
-    <!--Fixme không cần frameLayout trên đâu. Layout càng nhiều tầng thì thời gian bindview càng lâu nên hạn chế việc lồng layout không cần thiết-->
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcNote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcNote"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/rlMain"
-            android:padding="@dimen/dp_16" />
-    </LinearLayout>
-
-
-</FrameLayout>
+        android:layout_below="@id/rlMain"
+        android:padding="@dimen/dp_16" />
+</LinearLayout>

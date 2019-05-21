@@ -24,8 +24,5 @@ public class NewNotePresenterImp implements NewNotePresenter {
         }
     }
 
-    @Override
-    public void addImageNote(Note note, List<String> uRlImage) {
 
-    }
 }

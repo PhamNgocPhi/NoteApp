@@ -320,7 +320,7 @@ public class NewNoteFragment extends BaseFragment implements NewNoteView, View.O
                     showDialogCamera();
                 } else {
                     Toast.makeText(getContext(), R.string.permission, Toast.LENGTH_SHORT).show();
-                    System.exit(0);
+                    //System.exit(0);
                 }
                 break;
             default:

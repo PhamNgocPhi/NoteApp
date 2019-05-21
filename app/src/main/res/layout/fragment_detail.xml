@@ -1,54 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.splash.SplashFragment">
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--FIXME để layout này là layout tổng luôn , không cần 2 layout trên-->
+        android:layout_height="match_parent"
+        tools:context=".ui.splash.SplashFragment">
         <LinearLayout
             android:id="@id/llMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_alignParentBottom="true"
             android:background="#00bfff">
 
             <ImageView
                 android:id="@+id/ivPreviouitem"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/ic_action_previous_item" />
 
             <ImageView
                 android:id="@+id/ivShare"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/ic_action_share" />
 
             <ImageView
                 android:id="@+id/ivDiscard"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageView
                 android:id="@+id/ivNext"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/ic_action_next_item"
                 android:visibility="visible" />
         </LinearLayout>
@@ -81,6 +78,7 @@
 
                 <EditText
                     android:id="@+id/etTitleUpdate"
+                    android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_28" />
@@ -139,4 +137,3 @@
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
-</FrameLayout>
